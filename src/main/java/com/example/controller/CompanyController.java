@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.io.IOException;
+
 @Controller
 public class CompanyController {
 
@@ -33,7 +35,7 @@ public class CompanyController {
     }
 
     @PostMapping("/companies")
-    public String saveCompany(@ModelAttribute("company") Company company) {
+    public String saveCompany(@ModelAttribute("company") Company company) throws IOException {
         companyService.addCompany(company);
         return "redirect:/companies";
     }
@@ -44,15 +46,15 @@ public class CompanyController {
         return "/company/edit_company";
     }
 
-    @PostMapping("/companies/{id}")
-    public String updateCompany(@PathVariable Long id, @ModelAttribute("company") Company company) {
+    @PostMapping("/{id}/update")
+    public String updateCompany(@PathVariable Long id, @ModelAttribute("company") Company company) throws IOException {
         companyService.updateCompany(company);
         return "redirect:/companies";
     }
 
-    @GetMapping("/companies/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteCompany(@PathVariable Long id) {
-        companyService.deleteCompanyById(id);
+        companyService.deleteCompany(companyService.getCompanyById(id));
         return "redirect:/companies";
     }
 }

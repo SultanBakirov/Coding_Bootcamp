@@ -6,6 +6,7 @@ import com.example.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -24,7 +25,8 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void addCompany(Company company) {
+    public void addCompany(Company company) throws IOException{
+        validator(company.getCompanyName(), company.getLocatedCountry());
         companyRepository.addCompany(company);
     }
 
@@ -34,12 +36,30 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company updateCompany(Company company) {
+    public Company updateCompany(Company company) throws IOException{
+        validator(company.getCompanyName(), company.getLocatedCountry());
         return companyRepository.updateCompany(company);
     }
 
     @Override
-    public void deleteCompanyById(Long id) {
-        companyRepository.deleteCompanyById(id);
+    public void deleteCompany(Company company) {
+        companyRepository.deleteCompany(company);
+    }
+
+    private void validator(String companyName, String locatedCountry) throws IOException {
+        if (companyName.length()>2 && locatedCountry.length()>2) {
+            for (Character i : companyName.toCharArray()) {
+                if (!Character.isAlphabetic(i)) {
+                    throw new IOException("Numbers cannot be inserted in the company name");
+                }
+            }
+            for (Character i : locatedCountry.toCharArray()) {
+                if (!Character.isAlphabetic(i)) {
+                    throw new IOException("Numbers cannot be inserted in the country name");
+                }
+            }
+        }else {
+            throw new IOException("The name of the company or country must contain at least 2 letters");
+        }
     }
 }

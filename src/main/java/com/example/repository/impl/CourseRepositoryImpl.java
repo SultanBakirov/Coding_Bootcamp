@@ -2,12 +2,14 @@ package com.example.repository.impl;
 
 import com.example.models.Company;
 import com.example.models.Course;
+import com.example.models.Group;
 import com.example.repository.CourseRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 
 @Repository
@@ -25,7 +27,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public void addCourse(Long id, Course course) {
+    public void addCourse(Long id, Course course) throws IOException {
         Company company = entityManager.find(Company.class, id);
         company.addCourse(course);
         course.setCompany(company);
@@ -38,7 +40,7 @@ public class CourseRepositoryImpl implements CourseRepository {
     }
 
     @Override
-    public Course updateCourse(Course course, Long id) {
+    public Course updateCourse(Course course, Long id) throws IOException{
         Course course1 = entityManager.find(Course.class, id);
         course1.setCourseName(course.getCourseName());
         course1.setDuration(course.getDuration());
@@ -48,6 +50,12 @@ public class CourseRepositoryImpl implements CourseRepository {
 
     @Override
     public void deleteCourseById(Long id) {
-        entityManager.remove(entityManager.find(Course.class, id));
+        Course course = entityManager.find(Course.class, id);
+        for (Group g: course.getGroups()) {
+            g.minusCount();
+            g.getCourses().remove(course);
+        }
+        course.setCompany(null);
+        entityManager.remove(course);
     }
 }

@@ -24,33 +24,13 @@ public class GroupRepositoryImpl implements GroupRepository {
                 Group.class).setParameter("id", id).getResultList();
     }
 
-    @Override
-    public List<Group> getAllGroupsByCourseId(Long courseId) {
-        List<Group> groupList = entityManager.find(Course.class, courseId).getGroups();
-        groupList.forEach(System.out::println);
-        return groupList;
-    }
 
     @Override
-    public void addGroup(Long id, Group group){
+    public void addGroup(Long id, Group group) {
         Company company = entityManager.find(Company.class, id);
         company.addGroup(group);
         group.setCompany(company);
-        entityManager.merge(company);
-    }
-
-    @Override
-    public void addGroupByCourseId(Long id, Long courseId, Group group) {
-        Company company = entityManager.find(Company.class, id);
-        Course course = entityManager.find(Course.class, courseId);
-
-        company.addGroup(group);
-        group.setCompany(company);
-        group.addCourse(course);
-        course.addGroup(group);
-
-        entityManager.merge(course);
-        entityManager.merge(company);
+        entityManager.merge(group);
     }
 
     @Override

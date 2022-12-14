@@ -36,7 +36,7 @@ public class StudentRepositoryImpl implements StudentRepository {
         group.addStudent(student);
         student.setGroup(group);
         manager.merge(student);
-        for (Course c:student.getGroup().getCourses()) {
+        for (Course c:student.getGroup().getCompany().getCourses()) {
             for (Instructor i: c.getInstructors()) {
                 i.plus();
             }
@@ -60,10 +60,10 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public void deleteStudent(Long id) {
+    public void deleteStudentById(Long id) {
         Student student = manager.find(Student.class, id);
         student.getGroup().getCompany().minusStudent();
-        for (Course c:student.getGroup().getCourses()) {
+        for (Course c:student.getGroup().getCompany().getCourses()) {
             for (Instructor i:c.getInstructors()) {
                 i.minus();
             }
@@ -83,12 +83,12 @@ public class StudentRepositoryImpl implements StudentRepository {
                 }
             }
         }
-        for (Course c: student.getGroup().getCourses()) {
+        for (Course c: student.getGroup().getCompany().getCourses()) {
             for (Instructor i: c.getInstructors()) {
                 i.minus();
             }
         }
-        for (Course c: group.getCourses()) {
+        for (Course c: group.getCompany().getCourses()) {
             for (Instructor i: c.getInstructors()) {
                 i.plus();
             }

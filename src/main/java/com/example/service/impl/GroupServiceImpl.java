@@ -24,20 +24,12 @@ public class GroupServiceImpl implements GroupService {
         return groupRepository.getAllGroups(id);
     }
 
-    @Override
-    public List<Group> getAllGroupsByCourseId(Long courseId) {
-        return groupRepository.getAllGroupsByCourseId(courseId);
-    }
 
     @Override
-    public void addGroupByCourseId(Long id, Long courseId, Group group) {
-        groupRepository.addGroupByCourseId(id, courseId, group);
-    }
-
-    @Override
-    public void addGroup(Long id, Group group) {
+    public void addGroup(Long id, Group group){
         groupRepository.addGroup(id,group);
     }
+
 
     @Override
     public Group getGroupById(Long id) {
@@ -45,7 +37,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void updateGroup(Group group, Long id) {
+    public void updateGroup(Group group, Long id){
         groupRepository.updateGroup(group,id);
     }
 

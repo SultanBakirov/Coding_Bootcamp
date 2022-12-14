@@ -17,7 +17,7 @@ public interface StudentService {
 
     void updateStudent(Student student, Long id) throws IOException;
 
-    void deleteStudent(Long id);
+    void deleteStudentById(Long id);
 
     void assignStudent(Long groupId, Long studentId) throws IOException;
 

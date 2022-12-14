@@ -14,6 +14,6 @@ public interface CompanyRepository {
 
     Company updateCompany(Company company);
 
-    void deleteCompanyById(Long id);
+    void deleteCompany(Company company);
 
 }

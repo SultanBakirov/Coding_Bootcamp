@@ -62,36 +62,35 @@ public class InstructorServiceImpl implements InstructorService {
         if (firstName.length()>2 && lastName.length()>2) {
             for (Character i : firstName.toCharArray()) {
                 if (!Character.isAlphabetic(i)) {
-                    throw new IOException("В имени инструктора нельзя вставлять цифры");
+                    throw new IOException("Numbers cannot be inserted in the name of the instructor");
                 }
             }
 
             for (Character i : lastName.toCharArray()) {
                 if (!Character.isAlphabetic(i)) {
-                    throw new IOException("В фамилию инструктора нельзя вставлять цифры");
+                    throw new IOException("Numbers cannot be inserted into the name of the instructor");
                 }
             }
         } else {
-            throw new IOException("В имени или фамилии инструктора должно быть как минимум 3 буквы");
+            throw new IOException("Instructor's first or last name must contain at least 3 letters");
         }
 
-        if (phone.length()==13
+        if (phone.length()==12
                 && phone.charAt(0) == '+'
-                && phone.charAt(1) == '9'
-                && phone.charAt(2) == '9'
-                && phone.charAt(3) == '6'){
+                && phone.charAt(1) == '4'
+                && phone.charAt(2) == '8'){
             int counter = 0;
 
             for (Character i : phone.toCharArray()) {
                 if (counter!=0){
                     if (!Character.isDigit(i)) {
-                        throw new IOException("Формат номера не правильный");
+                        throw new IOException("Number format is not correct");
                     }
                 }
                 counter++;
             }
         }else {
-            throw new IOException("Формат номера не правильный");
+            throw new IOException("Number format is not correct");
         }
     }
 }

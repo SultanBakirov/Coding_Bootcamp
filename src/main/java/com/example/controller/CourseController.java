@@ -4,10 +4,7 @@ import com.example.models.Course;
 import com.example.models.Group;
 import com.example.models.Instructor;
 import com.example.models.Student;
-import com.example.service.CourseService;
-import com.example.service.GroupService;
-import com.example.service.InstructorService;
-import com.example.service.StudentService;
+import com.example.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,7 +36,8 @@ public class CourseController {
     @GetMapping("/courses/{id}")
     public String listCourses(@PathVariable Long id, Model model,
                               @ModelAttribute("group") Group group,
-                              @ModelAttribute("instructor") Instructor instructor) {
+                              @ModelAttribute("instructor") Instructor instructor,
+                              @ModelAttribute("student") Student student) {
         model.addAttribute("courses", courseService.getAllCourses(id));
         model.addAttribute("groups", groupService.getAllGroups(id));
         model.addAttribute("instructors", instructorService.getAllInstructors());
@@ -50,18 +48,18 @@ public class CourseController {
 
     @GetMapping("/courses/{id}/new")
     public String createCourseForm(@PathVariable Long id, Model model) {
-        model.addAttribute("companyId", id);
         model.addAttribute("course", new Course());
+        model.addAttribute("companyId", id);
         return "/course/create_course";
     }
 
     @PostMapping("/{id}/courses")
-    public String saveCourse(@PathVariable Long id, @ModelAttribute("course") Course course) {
+    public String saveCourse(@PathVariable Long id, @ModelAttribute("course") Course course) throws IOException {
         courseService.addCourse(id, course);
         return "redirect:/courses/" + id;
     }
 
-    @GetMapping("/update/edit/{id}")
+    @GetMapping("/courses/edit/{id}")
     public String editCourseForm(@PathVariable("id") Long id, Model model) {
         Course course = courseService.getCourseById(id);
         model.addAttribute("course", course);
@@ -69,16 +67,17 @@ public class CourseController {
         return "/course/edit_course";
     }
 
-    @PostMapping("/course/{id}/{companyId}")
-    public String updateCourse(@PathVariable("companyId") Long companyId,
-                               @PathVariable("id") Long id,
-                               @ModelAttribute("course") Course course) {
+    @PostMapping("/{id}/{companyId}/update")
+    public String updateCourse(@PathVariable("id") Long id,
+                               @PathVariable("companyId") Long companyId,
+                               @ModelAttribute("course") Course course) throws IOException {
         courseService.updateCourse(course, id);
         return "redirect:/courses/" + companyId;
     }
 
-    @GetMapping("/{companyId}/{id}/delete")
-    public String deleteCourse(@PathVariable("id") Long id, @PathVariable("companyId") Long companyId) {
+    @GetMapping("/{id}/{companyId}/delete")
+    public String deleteCourse(@PathVariable("id") Long id,
+                               @PathVariable("companyId") Long companyId) {
         courseService.deleteCourseById(id);
         return "redirect:/courses/" + companyId;
     }
@@ -100,14 +99,5 @@ public class CourseController {
         System.out.println(instructor);
         instructorService.assignInstructor(courseId, instructor.getId());
         return "redirect:/instructors/"+courseId;
-    }
-
-    @PostMapping("/{groupId}/assignStudent")
-    private String assignStudent(@PathVariable("groupId") Long groupId,
-                                 @ModelAttribute("student") Student student)
-            throws IOException {
-        System.out.println(student);
-        studentService.assignStudent(groupId, student.getId());
-        return "redirect:/students/"+groupId;
     }
 }

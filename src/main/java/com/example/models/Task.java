@@ -2,6 +2,7 @@ package com.example.models;
 
 import javax.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -28,6 +29,7 @@ public class Task {
     @Column(name = "task_text")
     private String taskText;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate deadline;
 
     @ManyToOne(cascade = {PERSIST,MERGE,REFRESH,DETACH}, fetch = EAGER)

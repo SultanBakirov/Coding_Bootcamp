@@ -17,7 +17,7 @@ public interface StudentRepository {
 
     void updateStudent(Student student, Long id);
 
-    void deleteStudent(Long id);
+    void deleteStudentById(Long id);
 
     void assignStudent(Long groupId, Long studentId) throws IOException;
 

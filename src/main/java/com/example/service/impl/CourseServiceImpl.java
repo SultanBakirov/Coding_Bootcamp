@@ -6,6 +6,7 @@ import com.example.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -24,7 +25,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void addCourse(Long id, Course course) {
+    public void addCourse(Long id, Course course) throws IOException{
+//        validator(course.getCourseName().replace(" ", ""), course.getDescription().replace(" ", ""), course.getDuration());
         courseRepository.addCourse(id, course);
     }
 
@@ -34,7 +36,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course updateCourse(Course course, Long id) {
+    public Course updateCourse(Course course, Long id) throws IOException{
+//        validator(course.getCourseName(), course.getDescription(), course.getDuration());
         return courseRepository.updateCourse(course, id);
     }
 
@@ -42,4 +45,16 @@ public class CourseServiceImpl implements CourseService {
     public void deleteCourseById(Long id) {
         courseRepository.deleteCourseById(id);
     }
+
+//    private void validator(String courseName, String description, int duration) throws IOException {
+//        if (courseName.length()>3 && description.length()>5 && description.length()<15 && duration>0 && duration<24){
+//            for (Character i: courseName.toCharArray()) {
+//                if (!Character.isLetter(i)){
+//                    throw new IOException("В название курса нельзя вставлять цифры");
+//                }
+//            }
+//        }else {
+//            throw new IOException("Form error course registration");
+//        }
+//    }
 }

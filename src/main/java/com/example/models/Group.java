@@ -2,6 +2,7 @@ package com.example.models;
 
 import javax.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +30,7 @@ public class Group {
     private String groupName;
 
     @Column(name = "date_of_start")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date dateOfStart;
 
     private String image;
@@ -46,11 +48,11 @@ public class Group {
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH}, fetch = EAGER)
     private Company company;
 
-    @ManyToMany(cascade = {PERSIST, MERGE, REFRESH, DETACH}, mappedBy = "groups")
+    @ManyToMany(cascade = {MERGE, REFRESH, DETACH,PERSIST}, mappedBy = "groups")
     private List<Course> courses;
-    public void addCourse(Course course) {
-        if (courses == null) {
-            courses = new ArrayList<>();
+    public void addCourse(Course course){
+        if (courses==null){
+            courses=new ArrayList<>();
         }
         courses.add(course);
         plusCount();
@@ -64,6 +66,7 @@ public class Group {
             students = new ArrayList<>();
         }
         students.add(student);
+        this.getCompany().plusStudent();
     }
 
     public void assignStudent(Student student){

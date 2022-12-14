@@ -29,6 +29,12 @@ public class LessonController {
         return "/lesson/lessons";
     }
 
+    @GetMapping("/getLessonById/{id}")
+    public String getLessonById(@PathVariable("id") Long id, Model model){
+        model.addAttribute("lesson", lessonService.getLessonById(id));
+        return "/lesson/lessons";
+    }
+
     @GetMapping("/lessons/{id}/new")
     public String createLessonForm(@PathVariable Long id, Model model) {
         model.addAttribute("lesson", new Lesson());

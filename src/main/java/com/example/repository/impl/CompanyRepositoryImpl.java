@@ -17,11 +17,13 @@ public class CompanyRepositoryImpl implements CompanyRepository {
     private EntityManager entityManager;
 
     @Override
+    @Transactional
     public List<Company> getAllCompanies() {
         return entityManager.createQuery("select c from Company c", Company.class).getResultList();
     }
 
     @Override
+    @Transactional
     public void addCompany(Company company) {
         entityManager.persist(company);
     }
@@ -37,7 +39,7 @@ public class CompanyRepositoryImpl implements CompanyRepository {
     }
 
     @Override
-    public void deleteCompanyById(Long id) {
-        entityManager.remove(entityManager.find(Company.class, id));
+    public void deleteCompany(Company company) {
+        entityManager.remove(entityManager.contains(company) ? company : entityManager.merge(company));
     }
 }
